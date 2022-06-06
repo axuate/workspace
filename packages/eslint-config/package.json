@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "main": "./index.js",
+  "scripts": {
+    "lint": "eslint index.js"
+  },
   "dependencies": {
     "eslint": "^8.16.0",
     "@typescript-eslint/eslint-plugin": "^5.26.0",
