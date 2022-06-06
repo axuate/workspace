@@ -1,0 +1,14 @@
+{
+  "name": "@axuate/jest",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint index.js"
+  },
+  "dependencies": {
+    "jest": "^28.1.0",
+    "@axuate/typescript": "*",
+    "@types/jest": "^28.1.1"
+  }
+}
