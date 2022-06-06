@@ -4,6 +4,10 @@ module.exports = {
     browser: true,
     node: true
   },
+  parserOptions: {
+    ecmaVersion: 2018,
+    sourceType: 'module'
+  },
   overrides: [
     {
       files: ['**/*.ts'],
