@@ -1,0 +1,10 @@
+{
+  "name": "@axuate/typescript",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "typescript": "^4.7.3",
+    "ts-node": "^10.8.1",
+    "ts-jest": "^28.0.4"
+  }
+}

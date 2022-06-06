@@ -8,3 +8,7 @@ updates:
     directory: '/packages/eslint-config'
     schedule:
       interval: 'daily'
+  - package-ecosystem: 'npm'
+    directory: '/packages/typescript'
+    schedule:
+      interval: 'daily'
