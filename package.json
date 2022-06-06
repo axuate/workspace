@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "scripts": {
+    "prepare": "husky install",
+    "lint": "lint-staged"
+  },
+  "devDependencies": {
+    "@axuate/eslint-config": "*",
+    "@commitlint/cli": "^17.0.2",
+    "@commitlint/config-conventional": "^17.0.2",
+    "husky": "^8.0.1",
+    "prettier": "^2.6.2",
+    "lint-staged": "^13.0.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}

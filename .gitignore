@@ -1,0 +1,23 @@
+# OSX
+.DS_Store
+
+# IDE
+.idea/
+
+# NPM
+node_modules/
+
+# Yarn
+yarn-error.log
+
+# Build
+packages/*/dist/
+packages/*/esm/
+packages/*/types/
+
+# Testing
+packages/*/coverage/
+packages/*/tmp/
+
+# Environment
+packages/*/.env
