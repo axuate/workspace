@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "eslint": "^8.16.0",
-    "@typescript-eslint/eslint-plugin": "^5.26.0",
+    "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "^5.26.0",
     "eslint-config-prettier": "^8.5.0",
     "@axuate/typescript": "*"
