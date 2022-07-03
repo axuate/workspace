@@ -6,13 +6,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "lint": "eslint index.ts",
-    "test": "jest --passWithNoTests",
-    "test:cucumber": "cucumber-js ./test/features"
+    "test": "jest --passWithNoTests"
   },
   "devDependencies": {
     "@axuate/eslint-config": "*",
     "@axuate/jest": "*",
-    "@axuate/typescript": "*",
-    "@axuate/cucumber": "*"
+    "@axuate/typescript": "*"
   }
 }
