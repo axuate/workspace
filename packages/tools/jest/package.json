@@ -12,6 +12,6 @@
     "jest": "^28.1.0",
     "@axuate/typescript": "*",
     "@types/jest": "^28.1.1",
-    "ts-jest": "^28.0.4"
+    "ts-jest": "^28.0.5"
   }
 }
