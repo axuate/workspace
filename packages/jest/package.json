@@ -2,9 +2,11 @@
   "name": "@axuate/jest",
   "version": "1.0.0",
   "private": true,
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
   "scripts": {
-    "lint": "eslint index.js"
+    "lint": "eslint index.ts",
+    "build": "tsc"
   },
   "dependencies": {
     "jest": "^28.1.0",

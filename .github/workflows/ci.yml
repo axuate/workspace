@@ -23,5 +23,7 @@ jobs:
         run: nx run-many --target=lint --all
       - name: Test all
         run: nx run-many --target=test --all
+      - name: Test Cucumber all
+        run: nx run-many --target=test:cucumber --all
       - name: Build all
         run: nx run-many --target=build --all

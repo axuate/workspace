@@ -24,6 +24,20 @@ module.exports = {
     {
       files: ['*'],
       extends: ['prettier']
+    },
+    {
+      files: ['**/*.test.ts'],
+      rules: {
+        '@typescript-eslint/unbound-method': 'off'
+      }
+    },
+    {
+      files: ['test/steps/**/*.ts'],
+      plugins: ['cucumber'],
+      rules: {
+        'cucumber/expression-type': ['error', 'RegExp'],
+        'cucumber/no-arrow-functions': 'error'
+      }
     }
   ]
 };

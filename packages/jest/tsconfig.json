@@ -1,0 +1,9 @@
+{
+  "extends": "@axuate/typescript/tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "declarationDir": "types",
+    "declaration": true
+  },
+  "include": ["index.ts"]
+}

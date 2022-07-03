@@ -7,10 +7,11 @@
     "lint": "eslint index.js"
   },
   "dependencies": {
-    "eslint": "^8.16.0",
+    "@axuate/typescript": "*",
     "@typescript-eslint/eslint-plugin": "^5.26.0",
     "@typescript-eslint/parser": "^5.26.0",
+    "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
-    "@axuate/typescript": "*"
+    "eslint-plugin-cucumber": "^2.0.0"
   }
 }
