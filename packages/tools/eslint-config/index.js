@@ -23,7 +23,10 @@ module.exports = {
     },
     {
       files: ['*'],
-      extends: ['prettier']
+      extends: ['prettier'],
+      rules: {
+        '@typescript-eslint/ban-types': 'off'
+      }
     },
     {
       files: ['**/*.test.ts'],
