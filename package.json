@@ -2,7 +2,11 @@
   "private": true,
   "scripts": {
     "prepare": "husky install",
-    "lint": "lint-staged"
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:cucumber": "turbo run cucumber",
+    "lint": "turbo run lint",
+    "all": "turbo run all"
   },
   "devDependencies": {
     "@axuate/eslint-config": "*",
@@ -10,8 +14,8 @@
     "@commitlint/config-conventional": "^17.0.2",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.0",
-    "nx": "14.1.9",
-    "prettier": "^2.6.2"
+    "prettier": "^2.6.2",
+    "turbo": "^1.3.1"
   },
   "workspaces": [
     "packages/*"

@@ -21,3 +21,6 @@ packages/*/tmp/
 
 # Environment
 packages/*/.env
+
+# Turbo
+.turbo/

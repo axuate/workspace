@@ -15,15 +15,9 @@ jobs:
           node-version: 'lts/*'
       - name: Install Yarn
         run: npm install -g yarn
-      - name: Install NX
-        run: npm install -g nx
+      - name: Install Turbo
+        run: npm install -g turbo
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: Lint all
-        run: nx run-many --target=lint --all
-      - name: Test all
-        run: nx run-many --target=test --all
-      - name: Test Cucumber all
-        run: nx run-many --target=test:cucumber --all
-      - name: Build all
-        run: nx run-many --target=build --all
+      - name: Continues integration
+        run: turbo run all

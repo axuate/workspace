@@ -1,0 +1,23 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist", "types"]
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "outputs": ["coverage"]
+    },
+    "test:cucumber": {
+      "dependsOn": ["build"],
+      "outputs": ["coverage"]
+    },
+    "lint": {
+      "dependsOn": ["build"]
+    },
+    "all": {
+      "dependsOn": ["build", "test", "test:cucumber", "lint"]
+    }
+  }
+}
