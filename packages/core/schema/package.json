@@ -9,6 +9,9 @@
     "test": "jest --passWithNoTests",
     "test:cucumber": "cucumber-js ./test/features"
   },
+  "dependencies": {
+    "reflect-metadata": "^0.1.13"
+  },
   "devDependencies": {
     "@axuate/eslint-config": "*",
     "@axuate/jest": "*",
