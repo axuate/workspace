@@ -5,7 +5,7 @@
     "build": "turbo run build",
     "test": "turbo run test",
     "test:cucumber": "turbo run cucumber",
-    "lint": "turbo run lint",
+    "lint": "lint-staged",
     "all": "turbo run all"
   },
   "devDependencies": {

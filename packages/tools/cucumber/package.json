@@ -1,0 +1,9 @@
+{
+  "name": "@axuate/cucumber",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./cucumber.js",
+  "dependencies": {
+    "@cucumber/cucumber": "^8.3.1"
+  }
+}
