@@ -11,16 +11,16 @@ node_modules/
 yarn-error.log
 
 # Build
-packages/*/dist/
-packages/*/esm/
-packages/*/types/
+packages/*/*/dist/
+packages/*/*/esm/
+packages/*/*/types/
 
 # Testing
-packages/*/coverage/
-packages/*/tmp/
+packages/*/*/coverage/
+packages/*/*/tmp/
 
 # Environment
-packages/*/.env
+packages/*/*/.env
 
 # Turbo
 .turbo/
