@@ -5,14 +5,22 @@ updates:
     schedule:
       interval: 'daily'
   - package-ecosystem: 'npm'
-    directory: '/packages/eslint-config'
+    directory: '/packages/tools/eslint-config'
     schedule:
       interval: 'daily'
   - package-ecosystem: 'npm'
-    directory: '/packages/typescript'
+    directory: '/packages/tools/typescript'
     schedule:
       interval: 'daily'
   - package-ecosystem: 'npm'
-    directory: '/packages/jest'
+    directory: '/packages/tools/jest'
+    schedule:
+      interval: 'daily'
+  - package-ecosystem: 'npm'
+    directory: '/packages/core/http'
+    schedule:
+      interval: 'daily'
+  - package-ecosystem: 'npm'
+    directory: '/packages/core/router'
     schedule:
       interval: 'daily'
