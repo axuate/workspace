@@ -1,3 +1,6 @@
 {
-  "extends": ["@axuate"]
+  "extends": ["@axuate"],
+  "rules": {
+    "@typescript-eslint/no-unsafe-assignment": "off"
+  }
 }
