@@ -28,3 +28,7 @@ updates:
     directory: '/packages/core/schema'
     schedule:
       interval: 'daily'
+  - package-ecosystem: 'npm'
+    directory: '/packages/core/container'
+    schedule:
+      interval: 'daily'
