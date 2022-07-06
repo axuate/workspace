@@ -1,0 +1,19 @@
+{
+  "name": "@axuate/container",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "eslint index.ts",
+    "test": "jest --passWithNoTests"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@axuate/eslint-config": "*",
+    "@axuate/jest": "*",
+    "@axuate/typescript": "*"
+  }
+}
