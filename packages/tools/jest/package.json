@@ -9,9 +9,9 @@
     "build": "tsc"
   },
   "dependencies": {
-    "jest": "^28.1.0",
+    "jest": "^28.1.2",
     "@axuate/typescript": "*",
-    "@types/jest": "^28.1.1",
+    "@types/jest": "^28.1.4",
     "ts-jest": "^28.0.5"
   }
 }
