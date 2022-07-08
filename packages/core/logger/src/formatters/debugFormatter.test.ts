@@ -4,7 +4,7 @@ import { LogLevel } from '../entities/LogLevel';
 describe('debugFormatter', () => {
   beforeAll(() => {
     jest.useFakeTimers();
-    jest.setSystemTime(new Date(2022, 1, 1));
+    jest.setSystemTime(new Date(1657296147000));
   });
 
   afterAll(() => {
@@ -23,6 +23,6 @@ describe('debugFormatter', () => {
         context: 'HTTP',
         meta: {}
       })
-    ).toBe('\x1b[2m2022-01-31T23:00:00.000Z\x1b[0m \x1b[32m INFO\x1b[0m \x1b[2m[HTTP]\x1b[0m Test');
+    ).toBe('\x1b[2m2022-07-08T16:02:27.000Z\x1b[0m \x1b[32m INFO\x1b[0m \x1b[2m[HTTP]\x1b[0m Test');
   });
 });
