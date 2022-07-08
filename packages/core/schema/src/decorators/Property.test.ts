@@ -1,6 +1,7 @@
 import { Property } from './Property';
 import 'reflect-metadata';
 import { registerProperty } from '../functions/registerProperty';
+import { PROPERTY_CONFIG } from '../constants/reflection';
 
 jest.mock('../functions/registerProperty');
 
@@ -27,7 +28,7 @@ describe('Property', () => {
     }
 
     expect(Reflect.defineMetadata).toHaveBeenCalledWith(
-      'config',
+      PROPERTY_CONFIG,
       { isArray: true, type: String },
       A.prototype,
       'name'

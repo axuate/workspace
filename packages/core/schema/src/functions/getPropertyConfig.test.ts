@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import { getPropertyConfig } from './getPropertyConfig';
+import { PROPERTY_CONFIG } from '../constants/reflection';
 
 describe('getPropertyConfig', () => {
   test('exports a function called getPropertyConfig', () => {
@@ -11,6 +12,6 @@ describe('getPropertyConfig', () => {
 
     jest.spyOn(Reflect, 'getMetadata').mockReturnValueOnce('{{CONFIG}}');
     expect(getPropertyConfig(A.prototype, 'name')).toBe('{{CONFIG}}');
-    expect(Reflect.getMetadata).toHaveBeenCalledWith('config', A.prototype, 'name');
+    expect(Reflect.getMetadata).toHaveBeenCalledWith(PROPERTY_CONFIG, A.prototype, 'name');
   });
 });
