@@ -1,0 +1,1 @@
+export const CONSTRUCTOR_ARGS = Symbol('CONSTRUCTOR_ARGS');
