@@ -39,7 +39,8 @@ module.exports = {
     {
       files: ['**/*.test.ts'],
       rules: {
-        '@typescript-eslint/unbound-method': 'off'
+        '@typescript-eslint/unbound-method': 'off',
+        '@typescript-eslint/no-explicit-any': 'off'
       }
     },
     {
