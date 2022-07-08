@@ -32,6 +32,17 @@ describe('Container', () => {
       expect(Container.prototype.resolve).toBeInstanceOf(Function);
     });
 
+    test('tries parent containers resolve method before throwing', () => {
+      const container = new Container();
+      const childContainer = new Container(container);
+      jest.spyOn(container, 'resolve');
+      const identifier = Symbol('identifier');
+      expect(() => {
+        childContainer.resolve(identifier);
+      }).toThrow('Symbol identifier "identifier" is not registered.');
+      expect(container.resolve).toHaveBeenCalledWith(identifier);
+    });
+
     test('throws an error if symbol identifier is not registered', () => {
       const container = new Container();
       const identifier = Symbol('identifier');

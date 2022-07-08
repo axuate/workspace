@@ -4,6 +4,11 @@ import type { ResolverConfig } from './entities/ResolverConfig';
 
 export class Container {
   private readonly identifier = new Map<Symbol | Constructor, ResolverConfig>();
+  private readonly parent: Container;
+
+  public constructor(parent?: Container) {
+    this.parent = parent;
+  }
 
   public register(identifier: Symbol | Constructor, resolver: Resolver): this {
     this.identifier.set(identifier, {
@@ -22,6 +27,9 @@ export class Container {
 
   public resolve<T>(identifier: Symbol | Constructor): T {
     if (!this.identifier.has(identifier)) {
+      if (this.parent) {
+        return this.parent.resolve(identifier);
+      }
       if (typeof identifier === 'symbol') {
         throw new Error(`Symbol identifier "${identifier.description}" is not registered.`);
       } else {
