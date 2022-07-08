@@ -19,7 +19,15 @@ module.exports = {
         project: './tsconfig.json'
       },
       parser: '@typescript-eslint/parser',
-      plugins: ['@typescript-eslint']
+      plugins: ['@typescript-eslint'],
+      rules: {
+        '@typescript-eslint/consistent-type-imports': [
+          'error',
+          {
+            prefer: 'type-imports'
+          }
+        ]
+      }
     },
     {
       files: ['*'],
