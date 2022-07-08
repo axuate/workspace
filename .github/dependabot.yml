@@ -36,3 +36,7 @@ updates:
     directory: '/packages/core/logger'
     schedule:
       interval: 'weekly'
+  - package-ecosystem: 'npm'
+    directory: '/packages/core/server'
+    schedule:
+      interval: 'weekly'
