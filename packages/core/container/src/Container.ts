@@ -14,6 +14,11 @@ import type { Constructor } from './entities/Constructor';
 export class Container {
   private readonly providers = new Map<Token, Provider>();
   private readonly values = new Map<Token, unknown>();
+  private readonly parent: Container | undefined;
+
+  public constructor(parent?: Container) {
+    this.parent = parent;
+  }
 
   public register<T>(provider: Provider<T>): this {
     if (this.providers.has(provider.token)) {
@@ -24,9 +29,22 @@ export class Container {
     return this;
   }
 
+  public hasToken(token: Token): boolean {
+    if (this.providers.has(token)) {
+      return true;
+    }
+    if (this.parent) {
+      return this.parent.hasToken(token);
+    }
+    return false;
+  }
+
   public resolve<T>(token: Token<T>): T {
     const provider = this.providers.get(token);
     if (!provider) {
+      if (this.parent && this.parent.hasToken(token)) {
+        return this.parent.resolve(token);
+      }
       if (typeof token === 'function') {
         return this.resolveClassConstructor(token);
       }

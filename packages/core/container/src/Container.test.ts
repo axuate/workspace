@@ -57,9 +57,40 @@ describe('Container', () => {
     });
   });
 
+  describe('hasToken', () => {
+    test('has a public method hasToken', () => {
+      expect(Container.prototype.hasToken).toBeInstanceOf(Function);
+    });
+
+    test('returns false if the container does not have the given token', () => {
+      const container = new Container();
+      expect(container.hasToken('Test')).toBe(false);
+    });
+
+    test('returns true if the container has the given token', () => {
+      const container = new Container();
+      container.register({ token: 'Test', useValue: 'test' });
+      expect(container.hasToken('Test')).toBe(true);
+    });
+
+    test('returns true if the parent container has the given token', () => {
+      const parentContainer = new Container();
+      parentContainer.register({ token: 'Test', useValue: 'test' });
+      const container = new Container(parentContainer);
+      expect(container.hasToken('Test')).toBe(true);
+    });
+  });
+
   describe('resolve', () => {
     test('has a public method resolve', () => {
       expect(Container.prototype.resolve).toBeInstanceOf(Function);
+    });
+
+    test('tries the parent container if the token is not defined', () => {
+      const parentContainer = new Container();
+      parentContainer.register({ token: 'Test', useValue: 'Test' });
+      const container = new Container(parentContainer);
+      expect(container.resolve('Test')).toBe('Test');
     });
 
     test('throws an error if token is not defined', () => {
