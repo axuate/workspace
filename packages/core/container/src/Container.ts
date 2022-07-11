@@ -1,54 +1,85 @@
+import 'reflect-metadata';
+import type { Provider } from './entities/Provider';
+import type { Token } from './entities/Token';
+import { getTokenName } from './functions/getTokenName';
+import { isValueProvider } from './guards/isValueProvider';
+import { isFactoryProvider } from './guards/isFactoryProvider';
+import { isClassProvider } from './guards/isClassProvider';
+import { CONSTRUCTOR_ARGS } from './constants/reflection';
+import type { ValueProvider } from './entities/ValueProvider';
+import type { FactoryProvider } from './entities/FactoryProvider';
+import type { ClassProvider } from './entities/ClassProvider';
 import type { Constructor } from './entities/Constructor';
-import type { Resolver } from './entities/Resolver';
-import type { ResolverConfig } from './entities/ResolverConfig';
 
 export class Container {
-  private readonly identifier = new Map<Symbol | Constructor, ResolverConfig>();
-  private readonly parent: Container;
+  private readonly providers = new Map<Token, Provider>();
+  private readonly values = new Map<Token, unknown>();
 
-  public constructor(parent?: Container) {
-    this.parent = parent;
-  }
-
-  public register(identifier: Symbol | Constructor, resolver: Resolver): this {
-    this.identifier.set(identifier, {
-      resolver
-    });
+  public register<T>(provider: Provider<T>): this {
+    if (this.providers.has(provider.token)) {
+      const tokenName = getTokenName(provider.token);
+      throw new Error(`Token "${tokenName}" already registered.`);
+    }
+    this.providers.set(provider.token, provider);
     return this;
   }
 
-  public registerSingleton(identifier: Symbol | Constructor, resolver: Resolver): this {
-    this.identifier.set(identifier, {
-      resolver,
-      singleton: true
-    });
-    return this;
+  public resolve<T>(token: Token<T>): T {
+    const provider = this.providers.get(token);
+    if (!provider) {
+      if (typeof token === 'function') {
+        return this.resolveClassConstructor(token);
+      }
+      const tokenName = getTokenName(token);
+      throw new Error(`Token "${tokenName}" is not registered.`);
+    }
+
+    if (isValueProvider(provider)) {
+      return this.resolveValueProvider(provider) as T;
+    } else if (isFactoryProvider(provider)) {
+      return this.resolveFactoryProvider(provider) as T;
+    } else if (isClassProvider(provider)) {
+      return this.resolveClassProvider(provider) as T;
+    }
   }
 
-  public resolve<T>(identifier: Symbol | Constructor): T {
-    if (!this.identifier.has(identifier)) {
-      if (this.parent) {
-        return this.parent.resolve(identifier);
-      }
-      if (typeof identifier === 'symbol') {
-        throw new Error(`Symbol identifier "${identifier.description}" is not registered.`);
-      } else {
-        throw new Error(
-          `Constructor identifier "${(identifier as Constructor).name}" is not registered.`
-        );
-      }
+  private cacheValue<T>(provider: ClassProvider | FactoryProvider, factory: () => T): T {
+    const { token, scope } = provider;
+    if (scope === 'transient') {
+      return factory();
     }
-    const config = this.identifier.get(identifier);
-    const { singleton, resolver, executed } = config;
+    if (this.values.has(token)) {
+      return this.values.get(token) as T;
+    }
+    const value = factory();
+    this.values.set(token, value);
+    return value;
+  }
 
-    if (singleton) {
-      if (!executed) {
-        config.executed = true;
-        config.value = resolver(this);
-      }
-      return config.value as T;
-    } else {
-      return resolver(this) as T;
+  private resolveClassProvider<T>(provider: ClassProvider<T>): T {
+    return this.cacheValue(provider, () => {
+      const constructor = provider.useClass;
+      return this.resolveClassConstructor(constructor);
+    });
+  }
+
+  private resolveClassConstructor<T>(constructor: Constructor<T>): T {
+    const tokens: Token[] = Reflect.getMetadata(CONSTRUCTOR_ARGS, constructor);
+    if (typeof tokens === 'undefined') {
+      throw new Error(`Class "${constructor.name}" is not marked as injectable.`);
     }
+    const args = tokens.map((token) => this.resolve(token));
+    return new constructor(...args);
+  }
+
+  private resolveValueProvider<T>(provider: ValueProvider<T>): T {
+    return provider.useValue;
+  }
+
+  private resolveFactoryProvider<T>(provider: FactoryProvider<T>): T {
+    return this.cacheValue(provider, () => {
+      const factory = provider.useFactory;
+      return factory(this);
+    });
   }
 }
