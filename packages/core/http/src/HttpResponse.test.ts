@@ -1,10 +1,31 @@
 import { HttpResponse } from './HttpResponse';
 import { HttpStatusCode } from './entities/HttpStatusCode';
 import { Readable } from 'stream';
+import type { ServerResponse } from 'http';
 
 describe('HttpResponse', () => {
   test('exports a class called HttpResponse', () => {
     expect(HttpResponse).toBeInstanceOf(Function);
+  });
+
+  describe('toServerResponse', () => {
+    test('has a public method toServerResponse', () => {
+      expect(HttpResponse.prototype.toServerResponse).toBeInstanceOf(Function);
+    });
+
+    test('adds all information to server response object', () => {
+      const res = {
+        setHeader: jest.fn(),
+        write: jest.fn()
+      } as any as ServerResponse;
+      const response = new HttpResponse(200);
+      response.setHeader('content-type', 'application/json');
+      response.setBody(Readable.from('Test'));
+      response.toServerResponse(res);
+      expect(res.statusCode).toBe(200);
+      expect(res.write).toHaveBeenCalled();
+      expect(res.setHeader).toHaveBeenCalledWith('content-type', 'application/json');
+    });
   });
 
   describe('getStatus', () => {

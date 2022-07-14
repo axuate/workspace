@@ -1,4 +1,5 @@
 import type { Readable } from 'stream';
+import type { ServerResponse } from 'http';
 
 export class HttpResponse {
   private readonly status: number;
@@ -7,6 +8,16 @@ export class HttpResponse {
 
   public constructor(status: number) {
     this.status = status;
+  }
+
+  public toServerResponse(res: ServerResponse): void {
+    res.statusCode = this.status;
+    this.headers.forEach((value, key) => {
+      res.setHeader(key, value);
+    });
+    if (this.body) {
+      res.write(this.body);
+    }
   }
 
   public getStatus(): number {

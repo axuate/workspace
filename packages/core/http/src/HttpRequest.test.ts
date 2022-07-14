@@ -1,9 +1,45 @@
 import { HttpRequest } from './HttpRequest';
 import { Readable } from 'stream';
+import type { IncomingHttpHeaders, IncomingMessage } from 'http';
 
 describe('HttpRequest', () => {
   test('Exports a class called HttpRequest', () => {
     expect(HttpRequest).toBeInstanceOf(Function);
+  });
+
+  describe('fromIncomingMessage', () => {
+    test('has a static method fromIncomingMessage', () => {
+      expect(HttpRequest.fromIncomingMessage).toBeInstanceOf(Function);
+    });
+
+    test('creates a HttpRequest', () => {
+      const req = {
+        method: 'GET',
+        url: '/test',
+        headers: {
+          'content-type': 'application/json'
+        } as IncomingHttpHeaders
+      } as IncomingMessage;
+      expect(HttpRequest.fromIncomingMessage(req)).toBeInstanceOf(HttpRequest);
+    });
+  });
+
+  describe('getQuery', () => {
+    test('has a public method getQuery', () => {
+      expect(HttpRequest.prototype.getQuery).toBeInstanceOf(Function);
+    });
+
+    test('returns an empty object if no query parameter exist', () => {
+      const request = new HttpRequest('GET', '/test');
+      expect(request.getQuery()).toEqual({});
+    });
+
+    test('returns a record with all query parameter', () => {
+      const request = new HttpRequest('GET', '/test?a=b');
+      expect(request.getQuery()).toEqual({
+        a: 'b'
+      });
+    });
   });
 
   describe('getHeader', () => {
