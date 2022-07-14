@@ -4,7 +4,7 @@ import type { HttpMethod } from './entities/HttpMethod';
 import type { Readable } from 'stream';
 
 export class HttpRequest {
-  private readonly headers: ReadonlyMap<string, string>;
+  private readonly headers: ReadonlyMap<string, string | string[]>;
   private readonly method: HttpMethod;
   private readonly path: string;
   private readonly body: Readable | undefined;
@@ -16,7 +16,7 @@ export class HttpRequest {
     this.body = requestConfig?.body;
   }
 
-  public getHeader(name: string): string | undefined {
+  public getHeader(name: string): string | string[] | undefined {
     return this.headers.get(name);
   }
 
@@ -40,7 +40,9 @@ export class HttpRequest {
     return this.body;
   }
 
-  private static headersToMap(headers: HttpHeaders | undefined): ReadonlyMap<string, string> {
+  private static headersToMap(
+    headers: HttpHeaders | undefined
+  ): ReadonlyMap<string, string | string[]> {
     if (headers) {
       return new Map(Object.entries(headers));
     }
