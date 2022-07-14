@@ -1,9 +1,9 @@
-import type { Readable } from 'stream';
+import type { Buffer } from 'buffer';
 import type { ServerResponse } from 'http';
 
 export class HttpResponse {
   private readonly status: number;
-  private body: Readable | undefined;
+  private body: Buffer | undefined;
   private readonly headers: Map<string, string> = new Map<string, string>();
 
   public constructor(status: number) {
@@ -24,12 +24,12 @@ export class HttpResponse {
     return this.status;
   }
 
-  public setBody(body: Readable): this {
+  public setBody(body: Buffer): this {
     this.body = body;
     return this;
   }
 
-  public getBody(): Readable | undefined {
+  public getBody(): Buffer | undefined {
     return this.body;
   }
 

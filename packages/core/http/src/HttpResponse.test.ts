@@ -1,6 +1,5 @@
 import { HttpResponse } from './HttpResponse';
 import { HttpStatusCode } from './entities/HttpStatusCode';
-import { Readable } from 'stream';
 import type { ServerResponse } from 'http';
 
 describe('HttpResponse', () => {
@@ -20,7 +19,7 @@ describe('HttpResponse', () => {
       } as any as ServerResponse;
       const response = new HttpResponse(200);
       response.setHeader('content-type', 'application/json');
-      response.setBody(Readable.from('Test'));
+      response.setBody(Buffer.from('Test'));
       response.toServerResponse(res);
       expect(res.statusCode).toBe(200);
       expect(res.write).toHaveBeenCalled();
@@ -46,7 +45,7 @@ describe('HttpResponse', () => {
 
     test('returns the own instance', () => {
       const response = new HttpResponse(HttpStatusCode.OK);
-      expect(response.setBody(Readable.from('Test'))).toBe(response);
+      expect(response.setBody(Buffer.from('Test'))).toBe(response);
     });
   });
 
@@ -61,8 +60,8 @@ describe('HttpResponse', () => {
     });
 
     test('returns the set body readable stream', () => {
-      const response = new HttpResponse(HttpStatusCode.OK).setBody(Readable.from('Test'));
-      expect(response.getBody()).toBeInstanceOf(Readable);
+      const response = new HttpResponse(HttpStatusCode.OK).setBody(Buffer.from('Test'));
+      expect(response.getBody()).toBeInstanceOf(Buffer);
     });
   });
 
