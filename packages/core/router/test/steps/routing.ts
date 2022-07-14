@@ -3,6 +3,7 @@ import { Router } from '../../src/Router';
 import { expect } from 'expect';
 import type { RouteMatch } from '../../src/entities/RouteMatch';
 import type { Route } from '../../src/entities/Route';
+import type { HttpMethod } from '@axuate/http';
 
 class World {
   public routes: Route<unknown>[] = [];
@@ -11,9 +12,10 @@ class World {
 
 setWorldConstructor(World);
 
-Given(/^route (.*)/, function (this: World, path: string) {
+Given(/^route (.*?) (.*?)$/, function (this: World, method: HttpMethod, path: string) {
   this.routes.push({
     path,
+    method,
     value: path
   });
 });
@@ -22,9 +24,9 @@ Given(/^no routes$/, function (this: World) {
   this.routes = [];
 });
 
-When(/routing (.*)/, function (this: World, path: string) {
+When(/routing (.*?) (.*?)$/, function (this: World, method: HttpMethod, path: string) {
   const router = new Router(this.routes);
-  this.routeMatch = router.route(path);
+  this.routeMatch = router.route(method, path);
 });
 
 Then(/the router throws "(.*)"/, function (this: World, errorMessage: string) {

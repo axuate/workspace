@@ -2,7 +2,8 @@ import { Router } from './Router';
 import { compileRoutes } from './functions/compileRoutes';
 import { segmentRoutes } from './functions/segmentRoutes';
 import { validatePath } from './functions/validatePath';
-import type { RouteGraph } from './entities/RouteGraph';
+import type { Route } from './entities/Route';
+import type { MethodGraph } from './entities/MethodGraph';
 
 jest.mock('./functions/compileRoutes');
 jest.mock('./functions/segmentRoutes');
@@ -20,16 +21,16 @@ describe('Router', () => {
 
     test('should call segmentRoutes', () => {
       const routes = [
-        { path: '/a', value: 'a' },
-        { path: '/b', value: 'b' }
-      ];
+        { method: 'GET', path: '/a', value: 'a' },
+        { method: 'GET', path: '/b', value: 'b' }
+      ] as Route<string>[];
       new Router<string>(routes);
       expect(segmentRoutes).toHaveBeenCalledWith(routes);
     });
 
     test('should call compile routes with all given routes', () => {
       (segmentRoutes as jest.Mock).mockReturnValue(['{{SEGMENTED_ROUTES}}']);
-      new Router<string>([{ path: '/a', value: 'a' }]);
+      new Router<string>([{ path: '/a', value: 'a', method: 'GET' }]);
       expect(compileRoutes).toHaveBeenCalledWith(['{{SEGMENTED_ROUTES}}']);
     });
   });
@@ -40,63 +41,69 @@ describe('Router', () => {
     });
 
     test('executes validatePath functions', () => {
-      new Router([]).route('/a/b');
+      (compileRoutes as jest.Mock).mockReturnValueOnce([]);
+      new Router([]).route('GET', '/a/b');
       expect(validatePath).toHaveBeenCalledWith('/a/b');
     });
 
     test('returns undefined if no route matches', () => {
+      (compileRoutes as jest.Mock).mockReturnValueOnce([]);
       const router = new Router([]);
-      expect(router.route('/a/b/c')).toBeUndefined();
+      expect(router.route('GET', '/a/b/c')).toBeUndefined();
     });
 
     test('returns value of caught route', () => {
-      const route = { path: '/a/b/c', value: 'a' };
+      const route: Route<string> = { path: '/a/b/c', value: 'a', method: 'GET' };
       (compileRoutes as jest.Mock).mockReturnValueOnce({
-        a: {
-          type: 'static',
-          name: 'a',
-          children: {
-            b: {
-              type: 'static',
-              name: 'b',
-              children: {
-                c: {
-                  type: 'static',
-                  name: 'c',
-                  route
+        GET: {
+          a: {
+            type: 'static',
+            name: 'a',
+            children: {
+              b: {
+                type: 'static',
+                name: 'b',
+                children: {
+                  c: {
+                    type: 'static',
+                    name: 'c',
+                    route
+                  }
                 }
               }
             }
           }
         }
-      } as RouteGraph<string>);
+      } as MethodGraph<string>);
       const router = new Router([route]);
-      expect(router.route('/a/b/c')).toEqual({ route, params: {} });
+      expect(router.route('GET', '/a/b/c')).toEqual({ route, params: {} });
     });
 
     test('returns value of caught route with variables', () => {
-      const route = { path: '/a/{name}/c', value: 'a' };
+      const route: Route<string> = { path: '/a/{name}/c', value: 'a', method: 'GET' };
       (compileRoutes as jest.Mock).mockReturnValueOnce({
-        a: {
-          type: 'static',
-          name: 'a',
-          children: {
-            '*': {
-              type: 'variable',
-              name: 'name',
-              children: {
-                c: {
-                  type: 'static',
-                  name: 'c',
-                  route
+        GET: {
+          a: {
+            type: 'static',
+            name: 'a',
+            children: {
+              '*': {
+                type: 'variable',
+                name: 'name',
+                children: {
+                  c: {
+                    type: 'static',
+                    name: 'c',
+                    route
+                  }
                 }
               }
             }
           }
         }
-      } as RouteGraph<string>);
+      } as MethodGraph<string>);
       const router = new Router([route]);
-      expect(router.route('/a/b/c')).toEqual({
+      expect(router.route('GET', '/a/b/c')).toEqual({
         route,
         params: {
           name: 'b'
@@ -105,22 +112,24 @@ describe('Router', () => {
     });
 
     test('returns value of caught route with variable segement at the end', () => {
-      const route = { path: '/a/{name}', value: 'a' };
+      const route: Route<string> = { path: '/a/{name}', value: 'a', method: 'GET' };
       (compileRoutes as jest.Mock).mockReturnValueOnce({
-        a: {
-          type: 'static',
-          name: 'a',
-          children: {
-            '*': {
-              type: 'variable',
-              name: 'name',
-              route
+        GET: {
+          a: {
+            type: 'static',
+            name: 'a',
+            children: {
+              '*': {
+                type: 'variable',
+                name: 'name',
+                route
+              }
             }
           }
         }
-      } as RouteGraph<string>);
+      } as MethodGraph<string>);
       const router = new Router([route]);
-      expect(router.route('/a/b')).toEqual({
+      expect(router.route('GET', '/a/b')).toEqual({
         route,
         params: {
           name: 'b'

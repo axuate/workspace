@@ -1,11 +1,12 @@
 import type { SegmentedRoute } from '../entities/SegmentedRoute';
-import type { RouteGraph } from '../entities/RouteGraph';
+import type { MethodGraph } from '../entities/MethodGraph';
 
-export function compileRoutes<T = unknown>(segmentedRoutes: SegmentedRoute<T>[]): RouteGraph<T> {
-  const graph: RouteGraph<T> = {};
+export function compileRoutes<T = unknown>(segmentedRoutes: SegmentedRoute<T>[]): MethodGraph<T> {
+  const graph: MethodGraph<T> = {};
 
   for (const segmentedRoute of segmentedRoutes) {
-    let graphPointer = graph;
+    graph[segmentedRoute.method] = graph[segmentedRoute.method] ?? {};
+    let graphPointer = graph[segmentedRoute.method];
     for (let i = 0; i < segmentedRoute.segments.length; i++) {
       const segment = segmentedRoute.segments[i];
       const segmentIdentifier = segment.type === 'variable' ? '*' : segment.name;

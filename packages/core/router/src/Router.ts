@@ -5,20 +5,22 @@ import { segmentRoutes } from './functions/segmentRoutes';
 import { validatePath } from './functions/validatePath';
 import { extractPathSegments } from './functions/extractPathSegments';
 import type { RouteMatch } from './entities/RouteMatch';
+import type { HttpMethod } from '@axuate/http';
+import type { MethodGraph } from './entities/MethodGraph';
 
 export class Router<T> {
-  private readonly graph: RouteGraph<T>;
+  private readonly graph: MethodGraph<T>;
 
   public constructor(routes: Route<T>[]) {
     const segmentedRoutes = segmentRoutes(routes);
     this.graph = compileRoutes(segmentedRoutes);
   }
 
-  public route(path: string): RouteMatch<T> | undefined {
+  public route(method: HttpMethod, path: string): RouteMatch<T> | undefined {
     validatePath(path);
     const segments = extractPathSegments(path);
     const params = {};
-    let graphPointer: RouteGraph<T> | undefined = this.graph;
+    let graphPointer: RouteGraph<T> | undefined = this.graph[method];
     for (let i = 0; i < segments.length; i++) {
       if (graphPointer) {
         const segment = segments[i];
@@ -41,6 +43,7 @@ export class Router<T> {
         break;
       }
     }
+
     return undefined;
   }
 }

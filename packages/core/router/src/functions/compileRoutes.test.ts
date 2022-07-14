@@ -1,6 +1,6 @@
 import { compileRoutes } from './compileRoutes';
 import { extractSegments } from './extractSegments';
-import type { RouteGraph } from '../entities/RouteGraph';
+import type { MethodGraph } from '../entities/MethodGraph';
 
 describe('compileRoutes', () => {
   test('exports a function called compileRoutes', () => {
@@ -13,175 +13,247 @@ describe('compileRoutes', () => {
 
   test('returns a graph with a single static node', () => {
     expect(
-      compileRoutes([{ segments: extractSegments('/a'), route: { path: '/a', value: 'a' } }])
+      compileRoutes([
+        {
+          segments: extractSegments('/a'),
+          method: 'GET',
+          route: { method: 'GET', path: '/a', value: 'a' }
+        }
+      ])
     ).toEqual({
-      a: {
-        type: 'static',
-        name: 'a',
-        route: { path: '/a', value: 'a' }
+      GET: {
+        a: {
+          type: 'static',
+          name: 'a',
+          route: { method: 'GET', path: '/a', value: 'a' }
+        }
       }
-    } as RouteGraph<string>);
+    } as MethodGraph<string>);
   });
 
   test('returns a graph with a single variable node', () => {
     expect(
       compileRoutes([
-        { segments: extractSegments('/{name}'), route: { path: '/{name}', value: 'a' } }
+        {
+          segments: extractSegments('/{name}'),
+          method: 'GET',
+          route: { method: 'GET', path: '/{name}', value: 'a' }
+        }
       ])
     ).toEqual({
-      '*': {
-        type: 'variable',
-        name: 'name',
-        route: { path: '/{name}', value: 'a' }
-      }
-    } as RouteGraph<string>);
+      GET: {
+        '*': {
+          type: 'variable',
+          name: 'name',
+          route: { method: 'GET', path: '/{name}', value: 'a' }
+        }
+      } as MethodGraph<string>
+    });
   });
 
   test('returns a graph with two static nodes', () => {
     expect(
-      compileRoutes([{ segments: extractSegments('/a/b'), route: { path: '/a/b', value: 'a' } }])
+      compileRoutes([
+        {
+          segments: extractSegments('/a/b'),
+          method: 'GET',
+          route: { method: 'GET', path: '/a/b', value: 'a' }
+        }
+      ])
     ).toEqual({
-      a: {
-        type: 'static',
-        name: 'a',
-        children: {
-          b: {
-            type: 'static',
-            name: 'b',
-            route: { path: '/a/b', value: 'a' }
+      GET: {
+        a: {
+          type: 'static',
+          name: 'a',
+          children: {
+            b: {
+              type: 'static',
+              name: 'b',
+              route: { method: 'GET', path: '/a/b', value: 'a' }
+            }
           }
         }
-      }
-    } as RouteGraph<string>);
+      } as MethodGraph<string>
+    });
   });
 
   test('returns a graph with three static nodes', () => {
     expect(
       compileRoutes([
-        { segments: extractSegments('/a/b/c'), route: { path: '/a/b/c', value: 'a' } }
+        {
+          segments: extractSegments('/a/b/c'),
+          method: 'GET',
+          route: { method: 'GET', path: '/a/b/c', value: 'a' }
+        }
       ])
     ).toEqual({
-      a: {
-        type: 'static',
-        name: 'a',
-        children: {
-          b: {
-            type: 'static',
-            name: 'b',
-            children: {
-              c: {
-                type: 'static',
-                name: 'c',
-                route: { path: '/a/b/c', value: 'a' }
+      GET: {
+        a: {
+          type: 'static',
+          name: 'a',
+          children: {
+            b: {
+              type: 'static',
+              name: 'b',
+              children: {
+                c: {
+                  type: 'static',
+                  name: 'c',
+                  route: { method: 'GET', path: '/a/b/c', value: 'a' }
+                }
               }
             }
           }
         }
       }
-    } as RouteGraph<string>);
+    } as MethodGraph<string>);
   });
 
   test('returns a graph with two static nodes and a variable node', () => {
     expect(
       compileRoutes([
-        { segments: extractSegments('/a/{name}/c'), route: { value: 'a', path: '/a/{name}/c' } }
+        {
+          segments: extractSegments('/a/{name}/c'),
+          method: 'GET',
+          route: { method: 'GET', value: 'a', path: '/a/{name}/c' }
+        }
       ])
     ).toEqual({
-      a: {
-        type: 'static',
-        name: 'a',
-        children: {
-          '*': {
-            type: 'variable',
-            name: 'name',
-            children: {
-              c: {
-                type: 'static',
-                name: 'c',
-                route: { value: 'a', path: '/a/{name}/c' }
+      GET: {
+        a: {
+          type: 'static',
+          name: 'a',
+          children: {
+            '*': {
+              type: 'variable',
+              name: 'name',
+              children: {
+                c: {
+                  type: 'static',
+                  name: 'c',
+                  route: { method: 'GET', value: 'a', path: '/a/{name}/c' }
+                }
               }
             }
           }
         }
-      }
-    } as RouteGraph<string>);
+      } as MethodGraph<string>
+    });
   });
 
   test('returns a graph with two static nodes from two paths', () => {
     expect(
       compileRoutes([
-        { segments: extractSegments('/a'), route: { value: 'a', path: '/a' } },
-        { segments: extractSegments('/b'), route: { value: 'b', path: '/b' } }
+        {
+          segments: extractSegments('/a'),
+          method: 'GET',
+          route: { method: 'GET', value: 'a', path: '/a' }
+        },
+        {
+          segments: extractSegments('/b'),
+          method: 'GET',
+          route: { method: 'GET', value: 'b', path: '/b' }
+        }
       ])
     ).toEqual({
-      a: {
-        type: 'static',
-        name: 'a',
-        route: { value: 'a', path: '/a' }
-      },
-      b: {
-        type: 'static',
-        name: 'b',
-        route: { value: 'b', path: '/b' }
+      GET: {
+        a: {
+          type: 'static',
+          name: 'a',
+          route: { method: 'GET', value: 'a', path: '/a' }
+        },
+        b: {
+          type: 'static',
+          name: 'b',
+          route: { method: 'GET', value: 'b', path: '/b' }
+        }
       }
-    } as RouteGraph<string>);
+    } as MethodGraph<string>);
   });
 
   test('returns a graph that has two merging paths', () => {
     expect(
       compileRoutes([
-        { segments: extractSegments('/a'), route: { value: 'a', path: '/a' } },
-        { segments: extractSegments('/a/b'), route: { value: 'b', path: '/a/b' } }
+        {
+          segments: extractSegments('/a'),
+          method: 'GET',
+          route: { method: 'GET', value: 'a', path: '/a' }
+        },
+        {
+          segments: extractSegments('/a/b'),
+          method: 'GET',
+          route: { method: 'GET', value: 'b', path: '/a/b' }
+        }
       ])
     ).toEqual({
-      a: {
-        type: 'static',
-        name: 'a',
-        route: { value: 'a', path: '/a' },
-        children: {
-          b: {
-            type: 'static',
-            name: 'b',
-            route: { value: 'b', path: '/a/b' }
+      GET: {
+        a: {
+          type: 'static',
+          name: 'a',
+          route: { method: 'GET', value: 'a', path: '/a' },
+          children: {
+            b: {
+              type: 'static',
+              name: 'b',
+              route: { method: 'GET', value: 'b', path: '/a/b' }
+            }
           }
         }
       }
-    } as RouteGraph<string>);
+    } as MethodGraph<string>);
   });
 
   test('returns a graph when a shorter route is added after a longer route', () => {
     expect(
       compileRoutes([
-        { segments: extractSegments('/a/b/c'), route: { value: 'a', path: '/a/b/c' } },
-        { segments: extractSegments('/a/b'), route: { value: 'b', path: '/a/b' } }
+        {
+          method: 'GET',
+          segments: extractSegments('/a/b/c'),
+          route: { method: 'GET', value: 'a', path: '/a/b/c' }
+        },
+        {
+          method: 'GET',
+          segments: extractSegments('/a/b'),
+          route: { method: 'GET', value: 'b', path: '/a/b' }
+        }
       ])
     ).toEqual({
-      a: {
-        type: 'static',
-        name: 'a',
-        children: {
-          b: {
-            type: 'static',
-            name: 'b',
-            route: { value: 'b', path: '/a/b' },
-            children: {
-              c: {
-                type: 'static',
-                name: 'c',
-                route: { value: 'a', path: '/a/b/c' }
+      GET: {
+        a: {
+          type: 'static',
+          name: 'a',
+          children: {
+            b: {
+              type: 'static',
+              name: 'b',
+              route: { method: 'GET', value: 'b', path: '/a/b' },
+              children: {
+                c: {
+                  type: 'static',
+                  name: 'c',
+                  route: { method: 'GET', value: 'a', path: '/a/b/c' }
+                }
               }
             }
           }
         }
       }
-    } as RouteGraph<string>);
+    } as MethodGraph<string>);
   });
 
   test('throws an error if two paths are identical', () => {
     expect(() => {
       compileRoutes([
-        { route: { value: 'a', path: '/a/b' }, segments: extractSegments('/a/b') },
-        { route: { value: 'b', path: '/a/b' }, segments: extractSegments('/a/b') }
+        {
+          route: { method: 'GET', value: 'a', path: '/a/b' },
+          method: 'GET',
+          segments: extractSegments('/a/b')
+        },
+        {
+          route: { method: 'GET', value: 'b', path: '/a/b' },
+          method: 'GET',
+          segments: extractSegments('/a/b')
+        }
       ]);
     }).toThrowError('Route /a/b has already been defined.');
   });
@@ -189,38 +261,48 @@ describe('compileRoutes', () => {
   test('returns a graph that has two merging paths with variables', () => {
     expect(
       compileRoutes([
-        { segments: extractSegments('/a/{name}/b'), route: { value: 'a', path: '/a/{name}/b' } },
-        { segments: extractSegments('/a/b/c'), route: { value: 'b', path: '/a/b/c' } }
+        {
+          method: 'GET',
+          segments: extractSegments('/a/{name}/b'),
+          route: { method: 'GET', value: 'a', path: '/a/{name}/b' }
+        },
+        {
+          method: 'GET',
+          segments: extractSegments('/a/b/c'),
+          route: { method: 'GET', value: 'b', path: '/a/b/c' }
+        }
       ])
     ).toEqual({
-      a: {
-        type: 'static',
-        name: 'a',
-        children: {
-          b: {
-            type: 'static',
-            name: 'b',
-            children: {
-              c: {
-                type: 'static',
-                name: 'c',
-                route: { value: 'b', path: '/a/b/c' }
+      GET: {
+        a: {
+          type: 'static',
+          name: 'a',
+          children: {
+            b: {
+              type: 'static',
+              name: 'b',
+              children: {
+                c: {
+                  type: 'static',
+                  name: 'c',
+                  route: { method: 'GET', value: 'b', path: '/a/b/c' }
+                }
               }
-            }
-          },
-          '*': {
-            type: 'variable',
-            name: 'name',
-            children: {
-              b: {
-                type: 'static',
-                name: 'b',
-                route: { value: 'a', path: '/a/{name}/b' }
+            },
+            '*': {
+              type: 'variable',
+              name: 'name',
+              children: {
+                b: {
+                  type: 'static',
+                  name: 'b',
+                  route: { method: 'GET', value: 'a', path: '/a/{name}/b' }
+                }
               }
             }
           }
         }
       }
-    } as RouteGraph<string>);
+    });
   });
 });

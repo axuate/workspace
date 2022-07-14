@@ -1,16 +1,16 @@
 Feature: Adding routes
   Scenario: Adding a route that does already exist
-    Given route /a
-    And route /a
+    Given route GET /a
+    And route GET /a
     Then the router throws "Route /a has already been defined."
 
   Scenario: Adding a route with variables that does already exist
-    Given route /a/{id}
-    And route /a/{personId}
+    Given route GET /a/{id}
+    And route GET /a/{personId}
     Then the router throws "Route /a/{personId} has already been defined."
 
   Scenario Template: The router should validate <route>
-    Given route <route>
+    Given route GET <route>
     Then the router throws "<error>"
     Examples:
       | route          | error                                |
