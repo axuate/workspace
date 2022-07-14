@@ -4,7 +4,10 @@ import type { LogLevel } from '../entities/LogLevel';
 export const debugFormatter: Formatter = ({ message, context, level }): string => {
   const timestamp = new Date().toISOString();
   const logLevel = formatLevel(level);
-  return `\x1b[2m${timestamp}\x1b[0m ${logLevel} \x1b[2m[${context}]\x1b[0m ${message}`;
+  return `\x1b[2m${timestamp}\x1b[0m ${logLevel} \x1b[2m[${context.padEnd(
+    15,
+    '.'
+  )}]\x1b[0m ${message}`;
 };
 
 function formatLevel(logLevel: LogLevel): string {
