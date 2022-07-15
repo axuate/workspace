@@ -1,6 +1,5 @@
-import type { Token } from './Token';
+import type { BaseProvider } from './BaseProvider';
 
-export type ValueProvider<T = unknown> = {
-  token: Token<T>;
+export type ValueProvider<T = unknown> = BaseProvider<T> & {
   useValue: T;
 };

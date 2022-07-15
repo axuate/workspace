@@ -6,7 +6,6 @@ import { isValueProvider } from './guards/isValueProvider';
 import { isFactoryProvider } from './guards/isFactoryProvider';
 import { isClassProvider } from './guards/isClassProvider';
 import { CONSTRUCTOR_ARGS } from './constants/reflection';
-import type { ValueProvider } from './entities/ValueProvider';
 import type { FactoryProvider } from './entities/FactoryProvider';
 import type { ClassProvider } from './entities/ClassProvider';
 import type { Constructor } from './entities/Constructor';
@@ -15,6 +14,7 @@ export class Container {
   private readonly providers = new Map<Token, Provider>();
   private readonly values = new Map<Token, unknown>();
   private readonly parent: Container | undefined;
+  private readonly tags = new Map<symbol, Set<Token>>();
 
   public constructor(parent?: Container) {
     this.parent = parent;
@@ -24,6 +24,18 @@ export class Container {
     if (this.providers.has(provider.token)) {
       const tokenName = getTokenName(provider.token);
       throw new Error(`Token "${tokenName}" already registered.`);
+    }
+    if (provider.tags) {
+      for (const tag of provider.tags) {
+        const tokenSet = this.tags.get(tag);
+        if (tokenSet) {
+          tokenSet.add(provider.token);
+        } else {
+          const set = new Set<Token>();
+          set.add(provider.token);
+          this.tags.set(tag, set);
+        }
+      }
     }
     this.providers.set(provider.token, provider);
     return this;
@@ -37,6 +49,18 @@ export class Container {
       return this.parent.hasToken(token);
     }
     return false;
+  }
+
+  public resolveTag<T>(tag: symbol): T[] {
+    const tokens = this.tags.get(tag);
+    if (tokens) {
+      return this.resolveAll(Array.from(tokens)) as T[];
+    }
+    return [];
+  }
+
+  public resolveAll<T>(tokens: Token<T>[]): T[] {
+    return tokens.map((token) => this.resolve(token));
   }
 
   public resolve<T>(token: Token<T>): T {
@@ -53,7 +77,7 @@ export class Container {
     }
 
     if (isValueProvider(provider)) {
-      return this.resolveValueProvider(provider) as T;
+      return provider.useValue as T;
     } else if (isFactoryProvider(provider)) {
       return this.resolveFactoryProvider(provider) as T;
     } else if (isClassProvider(provider)) {
@@ -88,10 +112,6 @@ export class Container {
     }
     const args = tokens.map((token) => this.resolve(token));
     return new constructor(...args);
-  }
-
-  private resolveValueProvider<T>(provider: ValueProvider<T>): T {
-    return provider.useValue;
   }
 
   private resolveFactoryProvider<T>(provider: FactoryProvider<T>): T {

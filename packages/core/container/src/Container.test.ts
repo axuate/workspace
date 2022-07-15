@@ -10,6 +10,33 @@ describe('Container', () => {
     expect(Container).toBeInstanceOf(Function);
   });
 
+  describe('resolveTag', () => {
+    test('has a public method resolveTag', () => {
+      expect(Container.prototype.resolveTag).toBeInstanceOf(Function);
+    });
+
+    test('returns an empty array if no tags are defined', () => {
+      const container = new Container();
+      const tag = Symbol('Middleware');
+      expect(container.resolveTag(tag)).toEqual([]);
+    });
+
+    test('resolves a single instance by tag', () => {
+      const container = new Container();
+      const tag = Symbol('Middleware');
+      container.register({ token: 'Test', tags: [tag], useValue: 'Test' });
+      expect(container.resolveTag(tag)).toEqual(['Test']);
+    });
+
+    test('resolves multiple instances by tag', () => {
+      const container = new Container();
+      const tag = Symbol('Middleware');
+      container.register({ token: 'Test', tags: [tag], useValue: 'Test' });
+      container.register({ token: 'Test2', tags: [tag], useValue: 'Test2' });
+      expect(container.resolveTag(tag)).toEqual(['Test', 'Test2']);
+    });
+  });
+
   describe('register', () => {
     test('has a public method register', () => {
       expect(Container.prototype.register).toBeInstanceOf(Function);
