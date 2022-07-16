@@ -1,12 +1,18 @@
 {
   "name": "@axuate/server",
   "version": "0.1.0",
+  "license": "MIT",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "lint": "eslint index.ts",
     "test": "jest --passWithNoTests"
+  },
+  "dependencies": {
+    "@axuate/logger": "*",
+    "@axuate/container": "*",
+    "@axuate/router": "*"
   },
   "devDependencies": {
     "@axuate/eslint-config": "*",
