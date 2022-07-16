@@ -1,5 +1,4 @@
 import { Property } from './Property';
-import 'reflect-metadata';
 import { registerProperty } from '../functions/registerProperty';
 import { PROPERTY_CONFIG } from '../constants/reflection';
 

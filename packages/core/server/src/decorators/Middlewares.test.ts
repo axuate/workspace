@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { Middlewares } from './Middlewares';
 import { MIDDLEWARES } from '../constants/reflection';
 import type { Middleware } from '../entities/Middleware';

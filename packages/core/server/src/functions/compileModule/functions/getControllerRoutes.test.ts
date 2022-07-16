@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { getControllerRoutes } from './getControllerRoutes';
 import { ROUTES } from '../../../constants/reflection';
 

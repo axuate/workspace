@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { getProperties } from './getProperties';
 
 describe('getProperties', () => {

@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { Options } from './Options';
 import { REQUEST_METHOD, REQUEST_PATH } from '../constants/reflection';
 import { addRouteToReflection } from '../functions/addRouteToReflection';

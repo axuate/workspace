@@ -10,7 +10,7 @@
     "lint": "eslint index.ts",
     "test": "jest --passWithNoTests"
   },
-  "dependencies": {
+  "peerDependencies": {
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {

@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { Inject } from './Inject';
 import { CONSTRUCTOR_ARGS } from '../constants/reflection';
 

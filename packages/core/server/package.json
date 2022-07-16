@@ -10,6 +10,9 @@
     "lint": "eslint index.ts",
     "test": "jest --passWithNoTests"
   },
+  "peerDependencies": {
+    "reflect-metadata": "^0.1.13"
+  },
   "dependencies": {
     "@axuate/logger": "*",
     "@axuate/container": "*",

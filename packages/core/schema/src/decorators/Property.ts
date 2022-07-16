@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { registerProperty } from '../functions/registerProperty';
 import type { PropertyConfig } from '../entities/PropertyConfig';
 import { PROPERTY_CONFIG } from '../constants/reflection';

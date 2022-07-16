@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { getPropertyConfig } from './getPropertyConfig';
 import { PROPERTY_CONFIG } from '../constants/reflection';
 

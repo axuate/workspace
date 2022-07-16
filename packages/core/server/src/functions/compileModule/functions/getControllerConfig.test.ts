@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { CONTROLLER_CONFIG } from '../../../constants/reflection';
 import { getControllerConfig } from './getControllerConfig';
 

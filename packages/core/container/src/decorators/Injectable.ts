@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { CONSTRUCTOR_ARGS } from '../constants/reflection';
 
 export const Injectable: ClassDecorator = (target) => {

@@ -1,5 +1,4 @@
 import { registerProperty } from './registerProperty';
-import 'reflect-metadata';
 
 describe('registerProperty', () => {
   test('exports a function called registerProperty', () => {

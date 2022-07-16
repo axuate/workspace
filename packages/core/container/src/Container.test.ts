@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { Container } from './Container';
 import { getTokenName } from './functions/getTokenName';
 import { CONSTRUCTOR_ARGS } from './constants/reflection';

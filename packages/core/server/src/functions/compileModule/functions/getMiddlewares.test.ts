@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { getMiddlewares } from './getMiddlewares';
 import type { Container } from '@axuate/container';
 import { MIDDLEWARES } from '../../../constants/reflection';

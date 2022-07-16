@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import type { Constructor } from '../entities/Constructor';
 import { CONSTRUCTOR_ARGS } from '../constants/reflection';
 

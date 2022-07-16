@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { ROUTES } from '../constants/reflection';
 
 export function addRouteToReflection(propertyKey: string, controller: Object): void {

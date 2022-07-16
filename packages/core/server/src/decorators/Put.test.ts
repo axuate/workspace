@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { Put } from './Put';
 import { REQUEST_METHOD, REQUEST_PATH } from '../constants/reflection';
 import { addRouteToReflection } from '../functions/addRouteToReflection';

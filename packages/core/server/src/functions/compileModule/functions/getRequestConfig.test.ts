@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { getRequestConfig } from './getRequestConfig';
 import { REQUEST_METHOD, REQUEST_PATH } from '../../../constants/reflection';
 

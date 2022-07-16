@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { addRouteToReflection } from './addRouteToReflection';
 import { ROUTES } from '../constants/reflection';
 

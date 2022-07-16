@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { resolveRoute } from './resolveRoute';
 import { getRequestConfig } from './getRequestConfig';
 import type { Container } from '@axuate/container';

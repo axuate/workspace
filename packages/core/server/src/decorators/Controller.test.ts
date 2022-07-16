@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { Controller } from './Controller';
 import { Injectable } from '@axuate/container';
 import { CONTROLLER_CONFIG } from '../constants/reflection';

@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import type { Provider } from './entities/Provider';
 import type { Token } from './entities/Token';
 import { getTokenName } from './functions/getTokenName';
@@ -58,16 +57,6 @@ export class Container {
     return false;
   }
 
-  private getProvider(token: Token): Provider | undefined {
-    if (this.providers.has(token)) {
-      return this.providers.get(token);
-    }
-    if (this.parent) {
-      return this.parent.getProvider(token);
-    }
-    return undefined;
-  }
-
   public resolveTag<T>(tag: symbol): T[] {
     const tokens = Container.tags.get(tag);
     if (tokens) {
@@ -81,7 +70,7 @@ export class Container {
   }
 
   public resolve<T>(token: Token<T>): T {
-    const provider = this.getProvider(token);
+    const provider = this.providers.get(token);
     if (!provider) {
       if (this.parent && this.parent.hasToken(token)) {
         return this.parent.resolve(token);
