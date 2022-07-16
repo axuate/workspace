@@ -23,6 +23,8 @@ describe('debugFormatter', () => {
         context: 'HTTP',
         meta: {}
       })
-    ).toBe('\x1b[2m2022-07-08T16:02:27.000Z\x1b[0m \x1b[32m INFO\x1b[0m \x1b[2m[HTTP]\x1b[0m Test');
+    ).toBe(
+      '\x1b[2m2022-07-08T16:02:27.000Z\x1b[0m \x1b[32m INFO\x1b[0m \x1b[2m[HTTP...........]\x1b[0m Test'
+    );
   });
 });
