@@ -4,6 +4,7 @@ export default {
   collectCoverage: true,
   coverageReporters: ['clover', 'json', 'lcov', 'text', 'html'],
   collectCoverageFrom: ['src/**/*.ts'],
+  setupFilesAfterEnv: ['reflect-metadata'],
   coverageThreshold: {
     global: {
       branches: 100,
