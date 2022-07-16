@@ -1,7 +1,6 @@
 import { FallbackController } from './FallbackController';
 import type { Logger } from '@axuate/logger';
 import { HttpException } from '../exceptions/HttpException';
-import type { HttpRequest } from '@axuate/http';
 import { HttpResponse } from '@axuate/http';
 
 jest.mock('@axuate/http');
@@ -19,7 +18,7 @@ describe('FallbackController', () => {
     test('returns a HttpResponse with status code when the error is a HttpException', () => {
       const logger = { error: jest.fn() } as any as Logger;
       const controller = new FallbackController(logger);
-      controller.onError(new HttpException(100), {} as HttpRequest, {});
+      controller.onError(new HttpException(100));
       expect(HttpResponse).toHaveBeenCalledWith(100);
     });
 
@@ -27,7 +26,7 @@ describe('FallbackController', () => {
       const logger = { error: jest.fn() } as any as Logger;
       const controller = new FallbackController(logger);
       const error = new Error('Test');
-      controller.onError(error, {} as HttpRequest, {});
+      controller.onError(error);
       expect(HttpResponse).toHaveBeenCalledWith(500);
       expect(logger.error).toHaveBeenCalledWith(error.stack);
     });
