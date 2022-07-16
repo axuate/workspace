@@ -6,7 +6,8 @@
   "types": "types/index.d.ts",
   "scripts": {
     "lint": "eslint index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "build:watch": "tsc -p tsconfig.build.json --watch"
   },
   "dependencies": {
     "jest": "^28.1.2",
