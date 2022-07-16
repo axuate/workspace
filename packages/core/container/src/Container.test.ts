@@ -35,6 +35,15 @@ describe('Container', () => {
       container.register({ token: 'Test2', tags: [tag], useValue: 'Test2' });
       expect(container.resolveTag(tag)).toEqual(['Test', 'Test2']);
     });
+
+    test('resolves tags from parent container', () => {
+      const tag = Symbol('Middleware');
+      const parentContainer = new Container();
+      const container = new Container(parentContainer);
+      parentContainer.register({ token: 'Test', tags: [tag], useValue: 'Test' });
+      container.register({ token: 'Test2', tags: [tag], useValue: 'Test2' });
+      expect(container.resolveTag(tag)).toEqual(['Test', 'Test2']);
+    });
   });
 
   describe('register', () => {
@@ -50,6 +59,14 @@ describe('Container', () => {
           useValue: 'Test'
         })
       ).toBe(container);
+    });
+
+    test('throws an error if constructor is not marked is injectable', () => {
+      class Test {}
+      const container = new Container();
+      expect(() => {
+        container.register({ token: Test, useClass: Test });
+      }).toThrowError('Class "Test" is not marked as injectable.');
     });
 
     test('throws an error if string token is already defined', () => {
@@ -128,23 +145,6 @@ describe('Container', () => {
       }).toThrowError('Token "Test" is not registered.');
     });
 
-    test('return constructor instance if token is not defined', () => {
-      const container = new Container();
-      const constructor = jest.fn();
-      jest.spyOn(Reflect, 'getMetadata').mockReturnValueOnce([]);
-      expect(container.resolve(constructor)).toBeInstanceOf(constructor);
-    });
-
-    test('throws an error if constructor is not marked is injectable', () => {
-      const container = new Container();
-
-      class Test {}
-
-      expect(() => {
-        container.resolve(Test);
-      }).toThrowError('Class "Test" is not marked as injectable.');
-    });
-
     test('returns value of value provider', () => {
       const container = new Container();
       container.register({ token: 'Test', useValue: 'Test' });
@@ -162,8 +162,8 @@ describe('Container', () => {
     test('returns new instance of class', () => {
       const container = new Container();
       const constructor = jest.fn();
+      jest.spyOn(Reflect, 'getMetadata').mockReturnValueOnce([]).mockReturnValueOnce([]);
       container.register({ token: 'Test', useClass: constructor });
-      jest.spyOn(Reflect, 'getMetadata').mockReturnValueOnce([]);
       expect(container.resolve('Test')).toBeInstanceOf(constructor);
       expect(constructor).toHaveBeenCalled();
     });
@@ -174,9 +174,13 @@ describe('Container', () => {
       const constructorArgument = jest.fn();
       jest
         .spyOn(Reflect, 'getMetadata')
+        .mockReturnValueOnce([])
+        .mockReturnValueOnce([])
         .mockReturnValueOnce([constructorArgument])
         .mockReturnValueOnce([]);
       container.register({ token: 'Test', useClass: constructor });
+      container.register({ token: constructorArgument, useClass: constructorArgument });
+
       expect(container.resolve('Test')).toBeInstanceOf(constructor);
       expect(Reflect.getMetadata).toHaveBeenCalledWith(CONSTRUCTOR_ARGS, constructor);
       expect(constructor).toHaveBeenCalledWith(expect.any(constructorArgument));
@@ -204,7 +208,7 @@ describe('Container', () => {
     test('should not instantiate constructor twice if its scope is singleton', () => {
       const container = new Container();
       const constructor = jest.fn();
-      jest.spyOn(Reflect, 'getMetadata').mockReturnValueOnce([]);
+      jest.spyOn(Reflect, 'getMetadata').mockReturnValueOnce([]).mockReturnValueOnce([]);
       container.register({ token: 'Test', useClass: constructor, scope: 'singleton' });
       expect(container.resolve('Test')).toBeInstanceOf(constructor);
       expect(container.resolve('Test')).toBeInstanceOf(constructor);
@@ -214,7 +218,11 @@ describe('Container', () => {
     test('should instantiate constructor twice if its scope is transient', () => {
       const container = new Container();
       const constructor = jest.fn();
-      jest.spyOn(Reflect, 'getMetadata').mockReturnValueOnce([]).mockReturnValueOnce([]);
+      jest
+        .spyOn(Reflect, 'getMetadata')
+        .mockReturnValueOnce([])
+        .mockReturnValueOnce([])
+        .mockReturnValueOnce([]);
       container.register({ token: 'Test', useClass: constructor, scope: 'transient' });
       expect(container.resolve('Test')).toBeInstanceOf(constructor);
       expect(container.resolve('Test')).toBeInstanceOf(constructor);

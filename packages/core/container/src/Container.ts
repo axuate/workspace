@@ -8,13 +8,12 @@ import { isClassProvider } from './guards/isClassProvider';
 import { CONSTRUCTOR_ARGS } from './constants/reflection';
 import type { FactoryProvider } from './entities/FactoryProvider';
 import type { ClassProvider } from './entities/ClassProvider';
-import type { Constructor } from './entities/Constructor';
 
 export class Container {
   private readonly providers = new Map<Token, Provider>();
   private readonly values = new Map<Token, unknown>();
   private readonly parent: Container | undefined;
-  private readonly tags = new Map<symbol, Set<Token>>();
+  private static readonly tags = new Map<symbol, Set<Token>>();
 
   public constructor(parent?: Container) {
     this.parent = parent;
@@ -25,15 +24,23 @@ export class Container {
       const tokenName = getTokenName(provider.token);
       throw new Error(`Token "${tokenName}" already registered.`);
     }
+
+    if (isClassProvider(provider)) {
+      const tokens: Token[] = Reflect.getMetadata(CONSTRUCTOR_ARGS, provider.useClass);
+      if (typeof tokens === 'undefined') {
+        throw new Error(`Class "${provider.useClass.name}" is not marked as injectable.`);
+      }
+    }
+
     if (provider.tags) {
       for (const tag of provider.tags) {
-        const tokenSet = this.tags.get(tag);
+        const tokenSet = Container.tags.get(tag);
         if (tokenSet) {
           tokenSet.add(provider.token);
         } else {
           const set = new Set<Token>();
           set.add(provider.token);
-          this.tags.set(tag, set);
+          Container.tags.set(tag, set);
         }
       }
     }
@@ -51,8 +58,18 @@ export class Container {
     return false;
   }
 
+  private getProvider(token: Token): Provider | undefined {
+    if (this.providers.has(token)) {
+      return this.providers.get(token);
+    }
+    if (this.parent) {
+      return this.parent.getProvider(token);
+    }
+    return undefined;
+  }
+
   public resolveTag<T>(tag: symbol): T[] {
-    const tokens = this.tags.get(tag);
+    const tokens = Container.tags.get(tag);
     if (tokens) {
       return this.resolveAll(Array.from(tokens)) as T[];
     }
@@ -64,13 +81,10 @@ export class Container {
   }
 
   public resolve<T>(token: Token<T>): T {
-    const provider = this.providers.get(token);
+    const provider = this.getProvider(token);
     if (!provider) {
       if (this.parent && this.parent.hasToken(token)) {
         return this.parent.resolve(token);
-      }
-      if (typeof token === 'function') {
-        return this.resolveClassConstructor(token);
       }
       const tokenName = getTokenName(token);
       throw new Error(`Token "${tokenName}" is not registered.`);
@@ -101,17 +115,10 @@ export class Container {
   private resolveClassProvider<T>(provider: ClassProvider<T>): T {
     return this.cacheValue(provider, () => {
       const constructor = provider.useClass;
-      return this.resolveClassConstructor(constructor);
+      const tokens: Token[] = Reflect.getMetadata(CONSTRUCTOR_ARGS, constructor);
+      const args = tokens.map((token) => this.resolve(token));
+      return new constructor(...args);
     });
-  }
-
-  private resolveClassConstructor<T>(constructor: Constructor<T>): T {
-    const tokens: Token[] = Reflect.getMetadata(CONSTRUCTOR_ARGS, constructor);
-    if (typeof tokens === 'undefined') {
-      throw new Error(`Class "${constructor.name}" is not marked as injectable.`);
-    }
-    const args = tokens.map((token) => this.resolve(token));
-    return new constructor(...args);
   }
 
   private resolveFactoryProvider<T>(provider: FactoryProvider<T>): T {

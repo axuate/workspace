@@ -11,10 +11,5 @@ export default {
       lines: 100,
       statements: 100
     }
-  },
-  globals: {
-    'ts-jest': {
-      isolatedModules: true
-    }
   }
 };
