@@ -40,3 +40,7 @@ updates:
     directory: '/packages/core/server'
     schedule:
       interval: 'weekly'
+  - package-ecosystem: 'npm'
+    directory: '/packages/core/reflection'
+    schedule:
+      interval: 'weekly'
