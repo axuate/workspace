@@ -1,0 +1,21 @@
+{
+  "name": "@axuate/reflection",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "build:watch": "tsc -p tsconfig.build.json --watch",
+    "lint": "eslint index.ts",
+    "test": "jest --passWithNoTests"
+  },
+  "peerDependencies": {
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@axuate/eslint-config": "*",
+    "@axuate/jest": "*",
+    "@axuate/typescript": "*"
+  }
+}
