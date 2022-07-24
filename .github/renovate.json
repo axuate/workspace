@@ -5,7 +5,7 @@
   "packageRules": [
     {
       "matchUpdateTypes": ["patch", "minor"],
-      "groupName": "None breaking updates",
+      "groupName": "None breaking dependencies",
       "groupSlug": "none-breaking"
     }
   ]
