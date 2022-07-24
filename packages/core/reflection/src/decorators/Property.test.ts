@@ -18,4 +18,14 @@ describe('Property', () => {
     expect(Metadata).toHaveBeenCalledWith(TYPE, Number);
     expect(Metadata).toHaveBeenCalledWith(PROPERTIES, ['getAge']);
   });
+
+  test('call with no config', () => {
+    (Metadata as jest.Mock).mockReturnValue(jest.fn());
+    const target = jest.fn();
+    Property()(target, 'getAge');
+    expect(Metadata).toHaveBeenCalledWith(IS_ARRAY, undefined);
+    expect(Metadata).toHaveBeenCalledWith(IS_OPTIONAL, undefined);
+    expect(Metadata).toHaveBeenCalledWith(TYPE, undefined);
+    expect(Metadata).toHaveBeenCalledWith(PROPERTIES, ['getAge']);
+  });
 });
