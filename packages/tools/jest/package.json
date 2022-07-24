@@ -13,7 +13,7 @@
     "jest": "^28.1.3",
     "@axuate/typescript": "*",
     "@types/jest": "^28.1.6",
-    "ts-jest": "^28.0.5",
+    "ts-jest": "^28.0.7",
     "reflect-metadata": "^0.1.13",
     "supertest": "^6.2.4",
     "@types/supertest": "^2.0.12"
