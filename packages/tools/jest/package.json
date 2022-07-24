@@ -2,20 +2,17 @@
   "name": "@axuate/jest",
   "version": "1.0.0",
   "private": true,
-  "main": "dist/index.js",
-  "types": "types/index.d.ts",
-  "scripts": {
-    "lint": "eslint index.ts",
-    "build": "tsc",
-    "build:watch": "tsc -p tsconfig.build.json --watch"
+  "exports": {
+    "./base": "./base.js",
+    "./integration": "./integration.js"
   },
   "dependencies": {
-    "jest": "^28.1.3",
-    "@axuate/typescript": "*",
     "@types/jest": "^28.1.6",
-    "ts-jest": "^28.0.7",
+    "@types/supertest": "^2.0.12",
+    "glob": "^8.0.3",
+    "jest": "^28.1.3",
     "reflect-metadata": "^0.1.13",
     "supertest": "^6.2.4",
-    "@types/supertest": "^2.0.12"
+    "ts-jest": "^28.0.7"
   }
 }
