@@ -8,8 +8,8 @@
     "build": "tsc -p tsconfig.build.json",
     "build:watch": "tsc -p tsconfig.build.json --watch",
     "lint": "eslint index.ts",
-    "test": "jest --passWithNoTests src",
-    "test:scenarios": "jest --passWithNoTests --config=test/jest.config.js test/scenarios"
+    "test": "jest",
+    "test:integration": "jest --config=./jest.integration.js"
   },
   "dependencies": {
     "@axuate/logger": "*",
