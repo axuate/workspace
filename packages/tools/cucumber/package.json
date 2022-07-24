@@ -4,6 +4,6 @@
   "private": true,
   "main": "./cucumber.js",
   "dependencies": {
-    "@cucumber/cucumber": "^8.4.0"
+    "@cucumber/cucumber": "^8.5.0"
   }
 }
