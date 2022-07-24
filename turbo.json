@@ -13,11 +13,15 @@
       "dependsOn": ["build"],
       "outputs": ["coverage"]
     },
+    "test:integration": {
+      "dependsOn": ["build"],
+      "outputs": ["coverage"]
+    },
     "lint": {
       "dependsOn": ["build"]
     },
     "all": {
-      "dependsOn": ["build", "test", "test:cucumber", "lint"]
+      "dependsOn": ["build", "test", "test:cucumber", "test:integration", "lint"]
     }
   }
 }
