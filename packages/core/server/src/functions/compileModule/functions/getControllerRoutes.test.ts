@@ -1,5 +1,5 @@
 import { getControllerRoutes } from './getControllerRoutes';
-import { ROUTES } from '../../../constants/reflection';
+import { getMetadata, METHODS } from '@axuate/reflection';
 
 describe('getControllerRoutes', () => {
   test('exports a function called getControllerRoutes', () => {
@@ -8,8 +8,8 @@ describe('getControllerRoutes', () => {
 
   test('returns routes from reflection data', () => {
     const controller = jest.fn();
-    jest.spyOn(Reflect, 'getMetadata').mockReturnValueOnce(['getUsers']);
+    (getMetadata as jest.Mock).mockReturnValueOnce(['getUsers']);
     expect(getControllerRoutes(controller)).toEqual(['getUsers']);
-    expect(Reflect.getMetadata).toHaveBeenCalledWith(ROUTES, controller);
+    expect(getMetadata).toHaveBeenCalledWith(METHODS, controller);
   });
 });

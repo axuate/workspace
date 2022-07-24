@@ -1,6 +1,7 @@
 import { getMiddlewares } from './getMiddlewares';
 import type { Container } from '@axuate/container';
 import { MIDDLEWARES } from '../../../constants/reflection';
+import { getMetadata } from '@axuate/reflection';
 
 describe('getMiddlewares', () => {
   test('exports a function called getMiddlewares', () => {
@@ -8,21 +9,19 @@ describe('getMiddlewares', () => {
   });
 
   test('gets middleware from controller', () => {
-    jest.spyOn(Reflect, 'getMetadata');
     const container = {} as Container;
     const constructor = jest.fn();
     getMiddlewares(container, constructor);
-    expect(Reflect.getMetadata).toHaveBeenCalledWith(MIDDLEWARES, constructor, undefined);
+    expect(getMetadata).toHaveBeenCalledWith(MIDDLEWARES, constructor, undefined);
   });
 
   test('gets middleware from method', () => {
-    jest.spyOn(Reflect, 'getMetadata');
     const container = {} as Container;
     const constructor = jest.fn();
     getMiddlewares(container, constructor, 'getUsers');
-    expect(Reflect.getMetadata).toHaveBeenCalledWith(
+    expect(getMetadata).toHaveBeenCalledWith(
       MIDDLEWARES,
-      constructor.prototype,
+      Object.getPrototypeOf(constructor),
       'getUsers'
     );
   });
@@ -35,7 +34,7 @@ describe('getMiddlewares', () => {
   });
 
   test('resolves all middlewares if they are defined', () => {
-    jest.spyOn(Reflect, 'getMetadata').mockReturnValueOnce([]);
+    (getMetadata as jest.Mock).mockReturnValueOnce([]);
     const container = {
       resolveAll: jest.fn().mockReturnValueOnce(['{{MIDDLEWARE}}'])
     } as any as Container;

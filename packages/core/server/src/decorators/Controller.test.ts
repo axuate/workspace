@@ -1,7 +1,7 @@
 import { Controller } from './Controller';
 import { Injectable } from '@axuate/container';
-import { CONTROLLER_CONFIG } from '../constants/reflection';
-import type { ControllerConfig } from '../entities/ControllerConfig';
+import { CONTROLLER_PREFIX, CONTROLLER_VERSION } from '../constants/reflection';
+import { Metadata } from '@axuate/reflection';
 
 jest.mock('@axuate/container');
 
@@ -15,18 +15,20 @@ describe('Controller', () => {
   });
 
   test('calls injectable decorator', () => {
-    class A {}
-    Controller()(A);
-    expect(Injectable).toHaveBeenCalledWith(A);
+    const target = jest.fn();
+    Controller()(target);
+    expect(Injectable).toHaveBeenCalledWith(target);
   });
 
-  test('saves controller config to metadata', () => {
-    const config: ControllerConfig = {
-      version: 1
-    };
-    jest.spyOn(Reflect, 'defineMetadata');
-    class A {}
-    Controller(config)(A);
-    expect(Reflect.defineMetadata).toHaveBeenCalledWith(CONTROLLER_CONFIG, config, A);
+  test('saves controller prefix', () => {
+    const target = jest.fn();
+    Controller({ prefix: '/api' })(target);
+    expect(Metadata).toHaveBeenCalledWith(CONTROLLER_PREFIX, '/api');
+  });
+
+  test('saves controller version', () => {
+    const target = jest.fn();
+    Controller({ version: 1 })(target);
+    expect(Metadata).toHaveBeenCalledWith(CONTROLLER_VERSION, 1);
   });
 });

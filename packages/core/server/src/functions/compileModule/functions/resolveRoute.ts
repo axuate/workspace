@@ -1,4 +1,4 @@
-import type { Constructor, Container } from '@axuate/container';
+import type { Container } from '@axuate/container';
 import { getRequestConfig } from './getRequestConfig';
 import type { RequestHandler } from '../../../entities/RequestHandler';
 import type { RouteConfig } from '../../../entities/RouteConfig';
@@ -9,7 +9,7 @@ export function resolveRoute(
   controller: Function,
   propertyKey: string
 ): RouteConfig {
-  const { method, path } = getRequestConfig(controller.prototype as Constructor, propertyKey);
+  const { method, path } = getRequestConfig(controller, propertyKey);
   const middlewares = getMiddlewares(container, controller, propertyKey);
   const requestHandler: RequestHandler = controller[propertyKey];
 

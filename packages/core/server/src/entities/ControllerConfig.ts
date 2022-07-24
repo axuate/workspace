@@ -1,4 +1,4 @@
 export type ControllerConfig = {
   prefix?: string;
-  version: number;
+  version?: number;
 };

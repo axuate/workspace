@@ -1,10 +1,10 @@
 import { REQUEST_METHOD, REQUEST_PATH } from '../constants/reflection';
-import { addRouteToReflection } from '../functions/addRouteToReflection';
+import { Metadata, Method } from '@axuate/reflection';
 
 export const Get: (path: string) => MethodDecorator = (path) => {
-  return (target, propertyKey) => {
-    Reflect.defineMetadata(REQUEST_PATH, path, target, propertyKey);
-    Reflect.defineMetadata(REQUEST_METHOD, 'GET', target, propertyKey);
-    addRouteToReflection(propertyKey as string, target);
+  return (target, propertyKey: string, descriptor) => {
+    Method()(target, propertyKey, descriptor);
+    Metadata(REQUEST_PATH, path)(target, propertyKey);
+    Metadata(REQUEST_METHOD, 'GET')(target, propertyKey);
   };
 };

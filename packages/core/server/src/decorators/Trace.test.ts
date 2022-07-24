@@ -1,8 +1,6 @@
 import { Trace } from './Trace';
 import { REQUEST_METHOD, REQUEST_PATH } from '../constants/reflection';
-import { addRouteToReflection } from '../functions/addRouteToReflection';
-
-jest.mock('../functions/addRouteToReflection');
+import { Metadata, Method } from '@axuate/reflection';
 
 describe('Trace', () => {
   test('exports a function called Trace', () => {
@@ -13,12 +11,21 @@ describe('Trace', () => {
     expect(Trace('/test')).toBeInstanceOf(Function);
   });
 
-  test('saves path and method to metadata', () => {
-    jest.spyOn(Reflect, 'defineMetadata');
-    class A {}
-    Trace('/test')(A, 'TraceUser', {});
-    expect(Reflect.defineMetadata).toHaveBeenCalledWith(REQUEST_PATH, '/test', A, 'TraceUser');
-    expect(Reflect.defineMetadata).toHaveBeenCalledWith(REQUEST_METHOD, 'TRACE', A, 'TraceUser');
-    expect(addRouteToReflection).toHaveBeenCalledWith('TraceUser', A);
+  test('marks method with Method decorator', () => {
+    const target = jest.fn();
+    Trace('/test')(target, 'test', {});
+    expect(Method()).toHaveBeenCalledWith(target, 'test', {});
+  });
+
+  test('saves request path', () => {
+    const target = jest.fn();
+    Trace('/test')(target, 'test', {});
+    expect(Metadata).toHaveBeenCalledWith(REQUEST_PATH, '/test');
+  });
+
+  test('saves request method', () => {
+    const target = jest.fn();
+    Trace('/test')(target, 'test', {});
+    expect(Metadata).toHaveBeenCalledWith(REQUEST_METHOD, 'TRACE');
   });
 });

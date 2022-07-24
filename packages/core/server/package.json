@@ -8,15 +8,14 @@
     "build": "tsc -p tsconfig.build.json",
     "build:watch": "tsc -p tsconfig.build.json --watch",
     "lint": "eslint index.ts",
-    "test": "jest --passWithNoTests"
-  },
-  "peerDependencies": {
-    "reflect-metadata": "^0.1.13"
+    "test": "jest --passWithNoTests src",
+    "test:scenarios": "jest --passWithNoTests --config=test/jest.config.js test/scenarios"
   },
   "dependencies": {
     "@axuate/logger": "*",
     "@axuate/container": "*",
-    "@axuate/router": "*"
+    "@axuate/router": "*",
+    "@axuate/reflection": "*"
   },
   "devDependencies": {
     "@axuate/eslint-config": "*",

@@ -1,8 +1,6 @@
 import { Post } from './Post';
 import { REQUEST_METHOD, REQUEST_PATH } from '../constants/reflection';
-import { addRouteToReflection } from '../functions/addRouteToReflection';
-
-jest.mock('../functions/addRouteToReflection');
+import { Metadata, Method } from '@axuate/reflection';
 
 describe('Post', () => {
   test('exports a function called Post', () => {
@@ -13,12 +11,21 @@ describe('Post', () => {
     expect(Post('/test')).toBeInstanceOf(Function);
   });
 
-  test('saves path and method to metadata', () => {
-    jest.spyOn(Reflect, 'defineMetadata');
-    class A {}
-    Post('/test')(A, 'PostUser', {});
-    expect(Reflect.defineMetadata).toHaveBeenCalledWith(REQUEST_PATH, '/test', A, 'PostUser');
-    expect(Reflect.defineMetadata).toHaveBeenCalledWith(REQUEST_METHOD, 'POST', A, 'PostUser');
-    expect(addRouteToReflection).toHaveBeenCalledWith('PostUser', A);
+  test('marks method with Method decorator', () => {
+    const target = jest.fn();
+    Post('/test')(target, 'test', {});
+    expect(Method()).toHaveBeenCalledWith(target, 'test', {});
+  });
+
+  test('saves request path', () => {
+    const target = jest.fn();
+    Post('/test')(target, 'test', {});
+    expect(Metadata).toHaveBeenCalledWith(REQUEST_PATH, '/test');
+  });
+
+  test('saves request method', () => {
+    const target = jest.fn();
+    Post('/test')(target, 'test', {});
+    expect(Metadata).toHaveBeenCalledWith(REQUEST_METHOD, 'POST');
   });
 });

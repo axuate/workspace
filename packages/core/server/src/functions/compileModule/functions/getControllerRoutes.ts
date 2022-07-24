@@ -1,6 +1,6 @@
 import type { Constructor } from '@axuate/container';
-import { ROUTES } from '../../../constants/reflection';
+import { getMetadata, METHODS } from '@axuate/reflection';
 
 export function getControllerRoutes(controller: Constructor): string[] {
-  return Reflect.getMetadata(ROUTES, controller) as string[];
+  return getMetadata(METHODS, controller);
 }

@@ -16,7 +16,7 @@ describe('resolveRoute', () => {
     const container = { resolveAll: jest.fn().mockReturnValueOnce([]) } as any as Container;
     const controller = jest.fn();
     resolveRoute(container, controller, 'getUsers');
-    expect(getRequestConfig).toHaveBeenCalledWith(controller.prototype, 'getUsers');
+    expect(getRequestConfig).toHaveBeenCalledWith(controller, 'getUsers');
   });
 
   test('resolves middlewares using getMiddlewares', () => {

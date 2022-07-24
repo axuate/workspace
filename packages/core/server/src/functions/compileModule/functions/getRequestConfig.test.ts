@@ -1,5 +1,6 @@
 import { getRequestConfig } from './getRequestConfig';
 import { REQUEST_METHOD, REQUEST_PATH } from '../../../constants/reflection';
+import { getMetadata } from '@axuate/reflection';
 
 describe('getRequestConfig', () => {
   test('exports a function called getRequestConfig', () => {
@@ -7,14 +8,9 @@ describe('getRequestConfig', () => {
   });
 
   test('get request meta information', () => {
-    jest
-      .spyOn(Reflect, 'getMetadata')
-      .mockReturnValueOnce('/test')
-      .mockReturnValueOnce('GET')
-      .mockReturnValueOnce([]);
     const controller = jest.fn();
     getRequestConfig(controller, 'getUsers');
-    expect(Reflect.getMetadata).toHaveBeenCalledWith(REQUEST_PATH, controller, 'getUsers');
-    expect(Reflect.getMetadata).toHaveBeenCalledWith(REQUEST_METHOD, controller, 'getUsers');
+    expect(getMetadata).toHaveBeenCalledWith(REQUEST_PATH, controller, 'getUsers');
+    expect(getMetadata).toHaveBeenCalledWith(REQUEST_METHOD, controller, 'getUsers');
   });
 });

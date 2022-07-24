@@ -1,8 +1,6 @@
 import { Connect } from './Connect';
+import { Metadata, Method } from '@axuate/reflection';
 import { REQUEST_METHOD, REQUEST_PATH } from '../constants/reflection';
-import { addRouteToReflection } from '../functions/addRouteToReflection';
-
-jest.mock('../functions/addRouteToReflection');
 
 describe('Connect', () => {
   test('exports a function called Connect', () => {
@@ -13,17 +11,21 @@ describe('Connect', () => {
     expect(Connect('/test')).toBeInstanceOf(Function);
   });
 
-  test('saves path and method to metadata', () => {
-    jest.spyOn(Reflect, 'defineMetadata');
-    class A {}
-    Connect('/test')(A, 'ConnectUser', {});
-    expect(Reflect.defineMetadata).toHaveBeenCalledWith(REQUEST_PATH, '/test', A, 'ConnectUser');
-    expect(Reflect.defineMetadata).toHaveBeenCalledWith(
-      REQUEST_METHOD,
-      'CONNECT',
-      A,
-      'ConnectUser'
-    );
-    expect(addRouteToReflection).toHaveBeenCalledWith('ConnectUser', A);
+  test('marks method with Method decorator', () => {
+    const target = jest.fn();
+    Connect('/test')(target, 'test', {});
+    expect(Method()).toHaveBeenCalledWith(target, 'test', {});
+  });
+
+  test('saves request path', () => {
+    const target = jest.fn();
+    Connect('/test')(target, 'test', {});
+    expect(Metadata).toHaveBeenCalledWith(REQUEST_PATH, '/test');
+  });
+
+  test('saves request method', () => {
+    const target = jest.fn();
+    Connect('/test')(target, 'test', {});
+    expect(Metadata).toHaveBeenCalledWith(REQUEST_METHOD, 'CONNECT');
   });
 });
